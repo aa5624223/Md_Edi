@@ -1,0 +1,316 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/Home/Index.js"></script>
+<div class="" style="text-align:center;margin-top:20px;">
+    <h3>美的EDI</h3>
+</div>
+<!-- 对话框 -->
+<div class="row">
+    <!-- 添加数据 -->
+    <div class="card col-lg-12" id="dialog_add" style="display:none">
+        <div class="card-body">
+            <div class="form-group row">
+                <!-- 供方编码 -->
+                <label class="col-lg-2 col-form-label" for="add_supplyItemCode">供方编码：</label>
+                <input class="col-lg-3 form-control" id="add_supplyItemCode" v-model="supplyItemCode" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 供方描述 -->
+                <label class="col-lg-2 col-form-label" for="add_itemDescription">供方描述：</label>
+                <input class="col-lg-3 form-control" id="add_itemDescription" v-model="itemDescription" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+
+            <div class="form-group row">
+                <!-- 需方编码 -->
+                <label class="col-lg-2 col-form-label" for="add_demandItemCode">美的编码：</label>
+                <input class="col-lg-3 form-control" id="add_demandItemCode" v-model="demandItemCode" type="text" />
+                <!-- invalid-feedback valid-feedback -->
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 需方描述 -->
+                <label class="col-lg-2 col-form-label" for="add_demandItemName">美的描述：</label>
+                <input class="col-lg-3 form-control" id="add_demandItemName" v-model="demandItemName" type="text" />
+                <!-- invalid-feedback valid-feedback -->
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+            <!-- 项目编号 -->
+            <div class="form-group row">
+                <label class="col-lg-2 col-form-label" for="add_Project">项目编号：</label>
+                <input class="col-lg-3 form-control" id="add_Project" v-model="Project" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 项目名 -->
+                <label class="col-lg-2 col-form-label" for="add_ProjectName">项目名：</label>
+                <input class="col-lg-3 form-control" id="add_ProjectName" v-model="ProjectName" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+            <div class="form-group row">
+                <!-- 库存编码 -->
+                <label class="col-lg-2 col-form-label" for="add_organizationCode">库存编码：</label>
+                <input class="col-lg-3 form-control" id="add_organizationCode" v-model="organizationCode" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 产地 -->
+                <label class="col-lg-2 col-form-label" for="add_organizationName">产地：</label>
+                <select class="col-lg-3 form-control" id="add_organizationName" v-model="organizationName">
+                    <option value="合肥华凌股份-冷柜工厂-制造">合肥华凌股份-冷柜工厂-制造</option>
+                    <option value="湖北美的电冰箱-荆州工厂">湖北美的电冰箱-荆州工厂</option>
+                    <option value="合肥华凌股份-经开区工厂-制造">合肥华凌股份-经开区工厂-制造</option>
+                    <option value="广东华凌">广东华凌</option>
+                </select>
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+            <!-- 备注 -->
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2">状态</label>
+                <select class="col-lg-3 form-control" id="add_flag" v-model="flag">
+                    <option value="1">在供</option>
+                    <option value="2">停供</option>
+                </select>
+                <label class="col-form-label col-lg-1"></label>
+                <label class="col-form-label col-lg-2">库存数</label>
+                <input type="number" id="add_QTY" v-model="QTY" />
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2" for="add_reference">备注:</label>
+                <!-- is-invalid is-valid  -->
+                <textarea class="form-control col-lg-3" id="add_reference" v-model="reference" rows="3" style="resize: none"></textarea>
+                <label class="col-form-label col-lg-1"></label>
+                <div class="col-lg-4" style="text-align:center;line-height:100px;">
+                    <button class="btn btn-primary" v-on:click="btn_Submit()">提交</button>
+                    <button class="btn ml-4" v-on:click="btn_Reset()">取消</button>
+                </div>
+            </div>
+            <div style="overflow-y:auto;font-size:80%;height:260px;">
+                <table id="Table_Add" class="table" style="width:2400px;">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>供方编码</th>
+                            <th style="width:500px">供方描述</th>
+                            <th>项目编号</th>
+                            <th>项目名</th>
+                            <th>美的编码</th>
+                            <th style="width:500px">美的描述</th>
+                            <th>库存编码</th>
+                            <th style="width:120px;">产地</th>
+                            <th>库存数</th>
+                            <th>状态</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in add_DataList">
+                            <td>{{index+1}}</td>
+                            <td>{{item.supplyItemCode}}</td>
+                            <td>{{item.itemDescription}}</td>
+                            <td>{{item.Project}}</td>
+                            <td>{{item.ProjectName}}</td>
+                            <td>{{item.demandItemCode}}</td>
+                            <td>{{item.demandItemName}}</td>
+                            <td>{{item.organizationCode}}</td>
+                            <td>{{item.organizationName}}</td>
+                            <td>{{item.QTY}}</td>
+                            <td>{{item.flag==1?'在供':'停供'}}</td>
+                            <td>{{item.reference}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12" style="text-align:center;margin-top:20px;">
+                <button class="btn btn-success ml-4" v-on:click="btn_Save()">保存</button>
+                <button class="btn ml-4" onclick="v_DiaLog_add.close()">关闭</button>
+            </div>
+        </div>
+
+    </div>
+    <!-- 编辑数据 -->
+    <div class="card col-lg-12" id="dialog_edit" style="display:none">
+        <div class="card-body">
+            <div class="form-group row">
+                <!-- 供方编码 -->
+                <label class="col-lg-2 col-form-label" for="edit_supplyItemCode">供方编码：</label>
+                <input class="col-lg-3 form-control" id="edit_supplyItemCode" v-model="supplyItemCode" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 供方描述 -->
+                <label class="col-lg-2 col-form-label" for="edit_itemDescription">供方描述：</label>
+                <input class="col-lg-3 form-control" id="edit_itemDescription" v-model="itemDescription" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+
+            <div class="form-group row">
+                <!-- 需方编码 -->
+                <label class="col-lg-2 col-form-label" for="edit_demandItemCode">美的编码：</label>
+                <input class="col-lg-3 form-control" id="edit_demandItemCode" v-model="demandItemCode" type="text" />
+                <!-- invalid-feedback valid-feedback -->
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 需方描述 -->
+                <label class="col-lg-2 col-form-label" for="edit_demandItemName">美的描述：</label>
+                <input class="col-lg-3 form-control" id="edit_demandItemName" v-model="demandItemName" type="text" />
+                <!-- invalid-feedback valid-feedback -->
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+            <!-- 项目编号 -->
+            <div class="form-group row">
+                <label class="col-lg-2 col-form-label" for="edit_Project">项目编号：</label>
+                <input class="col-lg-3 form-control" id="edit_Project" v-model="Project" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 项目名 -->
+                <label class="col-lg-2 col-form-label" for="edit_ProjectName">项目名：</label>
+                <input class="col-lg-3 form-control" id="edit_ProjectName" v-model="ProjectName" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+            <div class="form-group row">
+                <!-- 库存编码 -->
+                <label class="col-lg-2 col-form-label" for="edit_organizationCode">库存编码：</label>
+                <input class="col-lg-3 form-control" id="edit_organizationCode" v-model="organizationCode" type="text" />
+                <label class="col-form-label col-lg-1"></label>
+                <!-- 产地 -->
+                <label class="col-lg-2 col-form-label" for="edit_organizationName">产地：</label>
+                <select class="col-lg-3 form-control" id="edit_organizationName" v-model="organizationName">
+                    <option value="合肥华凌股份-冷柜工厂-制造">合肥华凌股份-冷柜工厂-制造</option>
+                    <option value="湖北美的电冰箱-荆州工厂">湖北美的电冰箱-荆州工厂</option>
+                    <option value="合肥华凌股份-经开区工厂-制造">合肥华凌股份-经开区工厂-制造</option>
+                    <option value="广东华凌">广东华凌</option>
+                </select>
+            </div>
+            <!-- 备注 -->
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2">状态</label>
+                <select class="col-lg-3 form-control" id="edit_flag" v-model="flag">
+                    <option value="1">在供</option>
+                    <option value="2">停供</option>
+                </select>
+                <label class="col-form-label col-lg-1"></label>
+                <label class="col-form-label col-lg-2" for="edit_QTY">库存数</label>
+                <input type="number" id="edit_QTY" v-model="QTY" />
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2" for="edit_reference">备注:</label>
+                <!-- is-invalid is-valid  -->
+                <textarea class="form-control col-lg-3" id="edit_reference" v-model="reference" rows="3" style="resize: none"></textarea>
+                <label class="col-form-label col-lg-1"></label>
+            </div>
+        </div>
+    </div>
+    <!-- 查询 -->
+    <div id="dialog_search" class="col-lg-12" style="display:none">
+        <div id="table_Search" style="margin-top:10px;font-size:80%">
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2 " for="Search_supplyItemCode">供方编码</label>
+                <input class="form-control col-lg-3" id="Search_supplyItemCode" v-model.lazy="supplyItemCode" />
+                <label class="col-form-label col-lg-2 " for="Search_itemDescription">供方描述</label>
+                <input class="form-control col-lg-3" id="Search_itemDescription" v-model.lazy="itemDescription" />
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2" for="Search_demandItemCode">美的编码</label>
+                <input class="form-control col-lg-3" id="Search_demandItemCode" v-model.lazy="demandItemCode" />
+                <label class="col-form-label col-lg-2 " for="Search_demandItemName">美的描述</label>
+                <input class="form-control col-lg-3" id="Search_demandItemName" v-model.lazy="demandItemName" />
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2 " for="Search_Project">项目编号</label>
+                <input class="form-control col-lg-3" id="Search_Project" v-model.lazy="Project" />
+                <label class="col-form-label col-lg-2 " for="Search_ProjectName">项目名</label>
+                <input class="form-control col-lg-3" id="Search_ProjectName" v-model.lazy="ProjectName" />
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2 " for="Search_organizationCode">库存编码</label>
+                <input class="form-control col-lg-3" id="Search_organizationCode" v-model.lazy="organizationCode" />
+                <label class="col-form-label col-lg-2 " for="Search_organizationName">产地</label>
+                <select class="col-lg-3 form-control" id="Search_organizationName" v-model.lazy="organizationName">
+                    <option value=""></option>
+                    <option value="合肥华凌股份-冷柜工厂-制造">合肥华凌股份-冷柜工厂-制造</option>
+                    <option value="湖北美的电冰箱-荆州工厂">湖北美的电冰箱-荆州工厂</option>
+                    <option value="合肥华凌股份-经开区工厂-制造">合肥华凌股份-经开区工厂-制造</option>
+                    <option value="广东华凌">广东华凌</option>
+                </select>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-lg-2 " for="Search_flg">供货状态</label>
+                <select id="Search_flg" class="form-control col-lg-3" v-model.lazy="flg">
+                    <option value=""></option>
+                    <option value="1">在供</option>
+                    <option value="2">停供</option>
+                </select>
+                <div class="form-group form-check col-lg-4 row" style="line-height:30px;">
+                    <label class="form-check-label col-lg-6" for="Search_flg2">删除</label>
+                    <input type="checkbox" class="form-check-input" style="margin-top:10px;" id="Search_flg2">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- 主体内容 -->
+<div id="MainContent" class="col-lg-12" style="height:530px;">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">档案维护</a>
+            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">数量维护</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <!-- 档案维护 -->
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="row">
+                <button class="btn btn-success ml-1" onclick="Dialog_Add()">添加</button>
+                <button class="btn btn-danger ml-1" onclick="Del_Check()">删除</button>
+                <button class="btn ml-1 btn-info" onclick="Dialog_Search()">查询</button>
+                <div class="col-lg-4 row">
+                    <div class="custom-file col-6" style="margin-left:10px;">
+                        <input type="file" class="custom-file-input col-6" id="ExcelFile2" aria-describedby="btn_upExcel2">
+                        <label class="custom-file-label" for="ExcelFile2">选择文件</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="ExcelUpload2()" id="btn_upExcel2">表格导入</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 数量维护 -->
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="row">
+                <div class="col-lg-3 row">
+                    <div class="custom-file col-8" style="margin-left:10px;">
+                        <input type="file" class="custom-file-input" id="ExcelFile" aria-describedby="btn_upExcel">
+                        <label class="custom-file-label" for="ExcelFile">选择文件</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="ExcelUpload()" id="btn_upExcel">上传数量</button>
+                    </div>
+                </div>
+                <div class="ml-2">
+                    <button class="btn btn-warning " style="margin-left:0px;" onclick="Edit_Check()">保存数量</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- 表格 -->
+    <div style="font-size:70%">
+        <table id="tab_dataInfo" class="table custom-table dataTable no-footer display" style="width:100%;">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="CheckAll1" onchange="CheckAll1(this)" />
+                    </th>
+                    <th>供方编码</th>
+                    <th>供方描述</th>
+                    <th>项目编号</th>
+                    <th>项目名</th>
+                    <th>美的编码</th>
+                    <th>美的描述</th>
+                    <th>库存编码</th>
+                    <th>产地</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                    <th>结存数</th>
+                    <th><button class="btn-sm btn btn-default" style="font-size:75%" onclick="CopyAll()">批量拷贝</button></th>
+                    <th>编辑</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

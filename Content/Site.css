@@ -1,0 +1,18 @@
+﻿.table tbody tr:hover {
+    background-color: #dddddd !important;
+}
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+    background-color: #f9f9f9;
+}
+table.dataTable tbody tr {
+    background-color: #ffffff;
+}
+#tab_dataInfo_filter label{
+    display:none;
+}
+input#file-upload-button {
+    background-color: green;
+}
+.custom-file label ::after{
+    display:none;
+}
